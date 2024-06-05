@@ -4,7 +4,7 @@ fenster=ctk.CTk()
 fenster._set_appearance_mode("system")
 fenster.title("Sonic-AI")
 fenster.geometry("700x500")
-fenster.iconbitmap('Icon.ico')
+fenster.iconbitmap('Bild.ico')
 def execute():
  fenster.quit()
 def login():
