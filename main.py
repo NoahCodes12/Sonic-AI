@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 # Initialize the OpenAI client with the API key
-apiKey = "sk-proj-z1nBaNtKFNwSqt6zjgCMT3BlbkFJslEuF5kuV0FaiWW1u5pH"
+apiKey = "sk-proj-Ozoy6RXcm4rrEpOa9cZiT3BlbkFJGpQAE85LYjNZkRJKhrmL"
 Client = OpenAI(api_key=apiKey)
 
 def chat_with_gpt(prompt):
@@ -9,7 +9,7 @@ def chat_with_gpt(prompt):
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
-    return response.choices[0].message['content']
+    return response.choices[0].message.content
 
 if __name__ == "__main__":
     while True:
