@@ -27,7 +27,17 @@ root.geometry('600x440')
 root.title('Sonic-AI')
 root.iconbitmap('Bild.ico')
 image_send= ImageTk.PhotoImage(Image.open('mingcute--send-fill (1).png'))
-# self.root.iconbitmap('icons8-file-folder-48.png')
+
+# saving image to variable
+dark_image = Image.open("sonic-running-run.png")
+# using ctkimage element to add image to
+bild = ctk.CTkImage(dark_image=dark_image, size= (80, 80))
+
+# putting the image inside a label
+label = ctk.CTkLabel(root, image=bild, text="")
+# placing the label
+label.place(x=1000, y=30)
+
 label=ctk.CTkLabel(root, text="Sonic-AI", font=('Arial', 100))
 label.pack(padx=20, pady=20)
 
