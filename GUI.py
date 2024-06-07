@@ -3,7 +3,7 @@ from PIL import Image,ImageTk
 import tkinter as tk
 import json
 from colorama import Fore, Style
-import AI_module as ai
+import AI as ai
 # import os
 # import shutil
 
@@ -32,6 +32,7 @@ def UserInput():
         USER_INPUT.append(scheme)
     response = ai.chat_with_gpt(UserGet)
     scroll.insert(tk.END, "Assistant: " + response + "\n")
+    # ai.speak(response)
     print(f"{Style.BRIGHT}{Fore.CYAN}Assistant input retrieved: {Style.NORMAL}{Fore.BLACK}{response}")
 
 # init window
@@ -51,6 +52,9 @@ label = ctk.CTkLabel(root, image=bild, text="")
 # placing the label
 label.place(x=1000, y=30)
 
+speak = ctk.CTkButton(root, width=50, height=50,text="", image=image_send, font=('Arial', 18), command=ai.listen_and_recognize) # letting recognize function handle it
+speak.place(x=1210,y=600)
+
 # Title
 label=ctk.CTkLabel(root, text="Sonic-AI", font=('Arial', 100))
 label.pack(padx=20, pady=20)
@@ -60,7 +64,7 @@ textbox=ctk.CTkTextbox(root, width=900, height=50, font=('Arial', 16,), fg_color
 textbox.place(x=250, y=600)
 
 # button to handle sending user input
-button=ctk.CTkButton(root, width=100, height=50,text="", image=image_send, font=('Arial', 18), command=UserInput)
+button=ctk.CTkButton(root, width=50, height=50,text="", image=image_send, font=('Arial', 18), command=UserInput)
 button.place(x=1155,y=600)
 
 # exit function for exit button
@@ -86,4 +90,7 @@ def combobox_callback(choice):
 # dropdown menu
 combobox = ctk.CTkComboBox(root,values=["chat", "practice"],command=combobox_callback, width=150, height=50)
 combobox.place(x=20, y=188)
+
+
+
 root.mainloop()
