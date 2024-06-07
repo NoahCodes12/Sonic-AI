@@ -1,15 +1,26 @@
 import customtkinter as ctk
-#from PIL import Image
 from PIL import Image,ImageTk
 # import rsvg,cairo 
 import tkinter as tk
-#def User_Input():
+import json
 
-#def AI_Answer():
+FILE_NAME = "vlt.json"
+USER_INPUT = []
+USER_NAME = "Test"
 
-
-
-
+def User_Input():
+    UserGet=textbox.get("1.0",'end-1c')
+    print(UserGet)
+    USER_INPUT.append(UserGet)
+    i = 0
+    for element in USER_INPUT:
+        print(f"{USER_NAME}: {USER_INPUT[i]}")
+        with open(FILE_NAME, 'a') as obj:
+            data = json.dump(f"{USER_NAME} : {USER_INPUT[i]},", obj)
+        # test
+        # UserText = ctk.CTkLabel(scroll, width=50, height=50, font=("Arial", 16), text=USER_INPUT)
+        # UserText.pack()
+    i+=1
 
 root = ctk.CTk()
 root.geometry('600x440')
@@ -23,7 +34,7 @@ label.pack(padx=20, pady=20)
 textbox=ctk.CTkTextbox(root, width=900, height=50, font=('Arial', 16,), fg_color="white", text_color="black")
 textbox.place(x=250, y=600)
 
-button=ctk.CTkButton(root, width=100, height=50,text="", image=image_send, font=('Arial', 18))
+button=ctk.CTkButton(root, width=100, height=50,text="", image=image_send, font=('Arial', 18), command=User_Input)
 button.place(x=1155,y=600)
 
 def exit():
@@ -45,7 +56,3 @@ combobox = ctk.CTkComboBox(root,values=["practice", "option2"],command=combobox_
 
 combobox.place(x=20, y=188)
 root.mainloop()
-
-
-
-
