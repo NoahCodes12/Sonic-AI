@@ -6,7 +6,7 @@ from colorama import Fore, Style
 import playsound
 
 # OpenAI API-Schlüssel (stellen Sie sicher, dass dieser Schlüssel sicher ist und nicht öffentlich geteilt wird)
-apiKey = "sk-proj-eg1dLsso5B2Q7W6IK1g4T3BlbkFJeqOkZL960QxNUDr8MJA6"
+apiKey = "sk-proj-5jLZmHTAYBQMRuFZdkxwT3BlbkFJsMmRcfD4tCgsqweWzcbI"
 Client = OpenAI(api_key=apiKey)
 
 def listen_and_recognize():

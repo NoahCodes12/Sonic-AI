@@ -4,6 +4,10 @@ import tkinter as tk
 import json
 from colorama import Fore, Style
 import AI as ai
+import Vokabel as vokabel
+import LoginGUI as lg
+import subprocess
+
 # import os
 # import shutil
 
@@ -11,6 +15,8 @@ import AI as ai
 FILE_NAME = "vlt.json"
 USER_INPUT = []
 USER_NAME = "NONE"
+
+
 
 # Get user input and process it
 def UserInput():
@@ -34,6 +40,14 @@ def UserInput():
     scroll.insert(tk.END, "Assistant: " + response + "\n")
     # ai.speak(response)
     print(f"{Style.BRIGHT}{Fore.CYAN}Assistant input retrieved: {Style.NORMAL}{Fore.BLACK}{response}")
+
+def Login():
+    subprocess.run(["python", "LoginGUI.py"])
+
+def Vokabel():
+    subprocess.run(["python","Vokabel.py"])
+
+
 
 # init window
 root = ctk.CTk()
@@ -88,7 +102,7 @@ Exit=ctk.CTkButton(root, text="Quit",font=("Arial", 30), command=exit, width=150
 Exit.place(x=20, y=40)
 
 # login button
-Login=ctk.CTkButton(root, text="Login",font=("Arial", 30), width=150, height=50)
+Login=ctk.CTkButton(root, text="Login",font=("Arial", 30), width=150, height=50, command=Login)
 Login.place(x=1350, y=40)
 
 # scroll = ctk.CTkScrollableFrame(root, width=980, height=390, fg_color="white")
@@ -101,13 +115,23 @@ scroll.place(x=250, y=188)
 def combobox_callback(choice):
     print(f"{Style.BRIGHT}{Fore.BLUE}dropdown clicked: {Style.BRIGHT}{Fore.LIGHTMAGENTA_EX}{choice}")
 
+combovalues = ["chat", "practice"]
+
+reference_dict = {
+
+    combovalues[1] : Vokabel
+
+} 
+
+def onChoice(choice):
+    if choice in reference_dict:
+        reference_dict[choice]()
+
 # dropdown menu
-combobox = ctk.CTkComboBox(root,values=["chat", "practice"],command=combobox_callback, width=150, height=50)
+combobox = ctk.CTkComboBox(root,values=combovalues, command=onChoice, width=150, height=50)
 combobox.place(x=20, y=188)
 
 english_knowledge = ctk.CTkComboBox(root,values=["Level 1", "Level 2", "Level 3"],command=combobox_callback, width=150, height=50)
 english_knowledge.place(x=20, y=250)
-
-
 
 root.mainloop()
