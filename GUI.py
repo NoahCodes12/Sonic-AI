@@ -83,6 +83,7 @@ Login.place(x=1350, y=40)
 scroll = ctk.CTkTextbox(root, width=1000, height=390, fg_color="white", text_color="lime", font=("Helvetica", 20))
 scroll.place(x=250, y=188)
 
+#
 # function to show choice clicked in dropdown
 def combobox_callback(choice):
     print(f"{Style.BRIGHT}{Fore.BLUE}dropdown clicked: {Style.BRIGHT}{Fore.LIGHTMAGENTA_EX}{choice}")
