@@ -1,14 +1,11 @@
 import json
 import os
+from colorama import Fore, Style
 
 # Function to collect user information
-def collect_user_info():
+def collect_user_info(name, age, english_knowledge):
     users = []
     while True:
-        name = input("Enter your name: ")
-        age = input("Enter your age: ")
-        english_knowledge = input("Enter your English knowledge level (beginner/intermediate/advanced): ")
-
         # Save the user information in a dictionary
         user = {
             "name": name,
@@ -16,13 +13,7 @@ def collect_user_info():
             "english_knowledge": english_knowledge
         }
         users.append(user)
-
-        # Ask if the user wants to add another entry
-        another = input("Do you want to add another user? (yes/no): ")
-        if another.lower() != "yes":
-            break
-    
-    return users
+        return users
 
 # Function to save the user information to a JSON file
 def save_to_json(new_data, filename="user_data.json"):
@@ -43,10 +34,4 @@ def save_to_json(new_data, filename="user_data.json"):
     with open(filename, "w") as file:
         json.dump(existing_data, file, indent=4)
 
-# Collect user information
-user_data = collect_user_info()
-
-# Save the collected information to a JSON file
-save_to_json(user_data)
-
-print("User information saved successfully.")
+print(f"{Fore.BLUE}User information {Style.BRIGHT}saved successfully.")
