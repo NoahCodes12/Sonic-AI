@@ -5,7 +5,7 @@ import json
 from colorama import Fore, Style
 import AI as ai
 import Vokabel as vokabel
-import LoginGUI as lg
+from LoginGUI import Login_GUI
 import subprocess
 
 # import os
@@ -16,8 +16,8 @@ FILE_NAME = "vlt.json"
 USER_INPUT = []
 USER_NAME = "NONE"
 
-
-
+def Log():
+    Login_GUI()
 # Get user input and process it
 def UserInput():
     UserGet=textbox.get("1.0",'end-1c')
@@ -102,7 +102,7 @@ Exit=ctk.CTkButton(root, text="Quit",font=("Arial", 30), command=exit, width=150
 Exit.place(x=20, y=40)
 
 # login button
-Login=ctk.CTkButton(root, text="Login",font=("Arial", 30), width=150, height=50, command=Login)
+Login=ctk.CTkButton(root, text="Login",font=("Arial", 30), width=150, height=50, command= Log)
 Login.place(x=1350, y=40)
 
 # scroll = ctk.CTkScrollableFrame(root, width=980, height=390, fg_color="white")
