@@ -13,7 +13,7 @@ def Login_GUI():
     root.geometry('400x460')
     root.title('Sonic-AI')
     root.iconbitmap('Bild.ico')
-    image_send1 = ImageTk.PhotoImage(Image.open('fluent--send-28-filled (1).png'))
+    
 
     #Login Frames and the Login Label
     LoginFrameOuter = ctk.CTkFrame(root, width=320, height=400)
@@ -24,7 +24,8 @@ def Login_GUI():
     Users=ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="Name")
     Age=ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="Age")
     Knowledge=ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="English knowledge lvl")
-    Login_Button=ctk.CTkButton(root, width=197, height=50, text="",image=image_send1, font=('Arial', 18))
+    
+    Login_Button=ctk.CTkButton(root, width=197, height=50, text="Subimt", font=('Arial', 18))
     #Places all UI elements
     Login_Button.place(x=100, y=360)
     LoginFrameOuter.place(x=40,y=35)

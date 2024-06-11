@@ -7,7 +7,9 @@ import AI as ai
 import Vokabel as vokabel
 from LoginGUI import Login_GUI
 from Blackjack import importblackjack_Game
+import Blackjack as b
 import subprocess
+
 
 # import os
 # import shutil
