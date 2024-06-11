@@ -40,9 +40,6 @@ class BlackjackGame:
         self.root = root
         self.root.title("Blackjack")
         self.root.geometry("800x600")
-        
-        # Set a background color
-        self.root.config(bg="green")
 
         self.deck = create_deck()
         self.player_hand = []
@@ -64,13 +61,33 @@ class BlackjackGame:
         return card_images
 
     def create_widgets(self):
+        # Load and set the background image
+        self.bg_image = Image.open('cards/table.jpg')
+        self.bg_image = self.bg_image.resize((800, 600), Image.LANCZOS)
+        self.bg_photo = ImageTk.PhotoImage(self.bg_image)
+
+        self.background_label = tk.Label(self.root, image=self.bg_photo)
+        self.background_label.place(relwidth=1, relheight=1)
+
+        # Load the player avatar
+        self.avatar_image = Image.open('cards/avatar.png').resize((100, 100), Image.LANCZOS)
+        self.avatar_photo = ImageTk.PhotoImage(self.avatar_image)
+
+        avatar_frame = tk.Frame(self.root, bg="green")
+        avatar_frame.pack(pady=10)
+
+        self.avatar_label = tk.Label(avatar_frame, image=self.avatar_photo, bg="green")
+        self.avatar_label.pack()
+
+        self.balance_label = tk.Label(avatar_frame, text=f"Balance: ${self.player_balance}", font=("Helvetica", 18), bg="green", fg="white")
+        self.balance_label.pack(pady=10)
+
         top_frame = tk.Frame(self.root, bg="green")
         top_frame.pack(pady=10)
 
-        self.balance_label = tk.Label(top_frame, text=f"Balance: ${self.player_balance}", font=("Helvetica", 18), bg="green", fg="white")
-        self.balance_label.pack(side=tk.LEFT, padx=10)
+        button_style = {"font": ("Helvetica", 14), "bg": "darkred", "fg": "white", "borderwidth": 2, "relief": "raised"}
 
-        self.reset_button = tk.Button(top_frame, text="Reset", command=self.reset_game, font=("Helvetica", 14), bg="darkred", fg="white")
+        self.reset_button = tk.Button(top_frame, text="Reset", command=self.reset_game, **button_style)
         self.reset_button.pack(side=tk.RIGHT, padx=10)
 
         bet_frame = tk.Frame(self.root, bg="green")
@@ -82,16 +99,16 @@ class BlackjackGame:
         self.bet_entry = tk.Entry(bet_frame, font=("Helvetica", 14))
         self.bet_entry.pack(side=tk.LEFT, padx=10)
 
-        self.deal_button = tk.Button(bet_frame, text="Deal", command=self.deal, font=("Helvetica", 14), width=10, bg="blue", fg="white")
+        self.deal_button = tk.Button(bet_frame, text="Deal", command=self.deal, **button_style)
         self.deal_button.pack(side=tk.LEFT, padx=10)
 
         action_frame = tk.Frame(self.root, bg="green")
         action_frame.pack(pady=10)
 
-        self.hit_button = tk.Button(action_frame, text="Hit", command=self.hit, state=tk.DISABLED, font=("Helvetica", 14), width=10, bg="blue", fg="white")
+        self.hit_button = tk.Button(action_frame, text="Hit", command=self.hit, state=tk.DISABLED, **button_style)
         self.hit_button.pack(side=tk.LEFT, padx=10)
 
-        self.stand_button = tk.Button(action_frame, text="Stand", command=self.stand, state=tk.DISABLED, font=("Helvetica", 14), width=10, bg="blue", fg="white")
+        self.stand_button = tk.Button(action_frame, text="Stand", command=self.stand, state=tk.DISABLED, **button_style)
         self.stand_button.pack(side=tk.LEFT, padx=10)
 
         self.player_label = tk.Label(self.root, text="Player's Hand: (Value: 0)", font=("Helvetica", 18), bg="green", fg="white")
