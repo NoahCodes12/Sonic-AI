@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 from PIL import Image, ImageTk
+import pygame
 
 def create_deck():
     suits = ['spades', 'hearts', 'diamonds', 'clubs']
@@ -41,6 +42,8 @@ class BlackjackGame:
         self.root.title("Blackjack")
         self.root.geometry("800x600")
 
+        pygame.mixer.init()  # Initialize the mixer module for sound effects
+
         self.deck = create_deck()
         self.player_hand = []
         self.dealer_hand = []
@@ -50,6 +53,8 @@ class BlackjackGame:
         self.card_images = self.load_card_images()
         self.create_widgets()
         self.start_new_game()
+
+        self.play_background_music()  # Play background music
 
     def load_card_images(self):
         card_images = {}
@@ -168,6 +173,7 @@ class BlackjackGame:
             self.update_hand_labels(initial)
             if player == 'player' and is_blackjack(self.player_hand):
                 self.player_balance += int(self.bet * 1.5)
+                self.play_win_sound()
                 self.end_round("Player has blackjack! Player wins!")
             return
 
@@ -193,6 +199,7 @@ class BlackjackGame:
         self.update_hand_labels()
         if is_bust(self.dealer_hand):
             self.player_balance += self.bet
+            self.play_win_sound()
             self.end_round("Dealer busts! Player wins!")
         else:
             self.determine_winner()
@@ -202,6 +209,7 @@ class BlackjackGame:
         dealer_value = calculate_hand_value(self.dealer_hand)
         if player_value > dealer_value:
             self.player_balance += self.bet
+            self.play_win_sound()
             self.end_round("Player wins!")
         elif player_value < dealer_value:
             self.player_balance -= self.bet
@@ -234,6 +242,14 @@ class BlackjackGame:
         self.update_hand_labels()  # Reveal dealer's hand value
         messagebox.showinfo("Round Over", result)
         self.start_new_game()
+
+    def play_win_sound(self):
+        pygame.mixer.music.load("sounds/win.mp3")
+        pygame.mixer.music.play()
+
+    def play_background_music(self):
+        pygame.mixer.music.load("sounds/music.mp3")
+        pygame.mixer.music.play(-1)  # Loop the music indefinitely
 
 if __name__ == "__main__":
     root = tk.Tk()
