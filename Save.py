@@ -3,14 +3,13 @@ import os
 from colorama import Fore, Style
 
 # Function to collect user information
-def collect_user_info(name, age, english_knowledge):
+def collect_user_info(name, age):
     users = []
     while True:
         # Save the user information in a dictionary
         user = {
             "name": name,
             "age": age,
-            "english_knowledge": english_knowledge
         }
         users.append(user)
         return users

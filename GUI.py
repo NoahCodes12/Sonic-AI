@@ -6,7 +6,10 @@ from colorama import Fore, Style
 import AI as ai
 import Vokabel as vokabel
 from LoginGUI import Login_GUI
+from Blackjack import importblackjack_Game
+import Blackjack as b
 import subprocess
+
 
 # import os
 # import shutil
@@ -18,6 +21,10 @@ USER_NAME = "NONE"
 
 def Log():
     Login_GUI()
+
+def Blackjack():
+    importblackjack_Game()
+
 # Get user input and process it
 def UserInput():
     UserGet=textbox.get("1.0",'end-1c')
@@ -41,8 +48,7 @@ def UserInput():
     # ai.speak(response)
     print(f"{Style.BRIGHT}{Fore.CYAN}Assistant input retrieved: {Style.NORMAL}{Fore.BLACK}{response}")
 
-def Login():
-    subprocess.run(["python", "LoginGUI.py"])
+
 
 def Vokabel():
     subprocess.run(["python","Vokabel.py"])
@@ -85,7 +91,7 @@ textbox.place(x=250, y=590)
 
 
 
-blackjack=ctk.CTkButton(root, text="Blackjack", width=150, height=50, font=('Arial', 30))
+blackjack=ctk.CTkButton(root, text="Blackjack", width=150, height=50, font=('Arial', 30), command=Blackjack)
 blackjack.place(x=20, y=315)
 
 def new_chat():

@@ -1,17 +1,25 @@
+<<<<<<<< HEAD:blackjack7.py
 import tkinter as tk
 from tkinter import messagebox
 import random
 from PIL import Image, ImageTk
 import pygame
+========
+def importblackjack_Game():
+ import tkinter as tk
+ from tkinter import messagebox
+ import random
+ from PIL import Image, ImageTk
+>>>>>>>> fe8760b3c723072b061b0eb69bebc4212e9f3f4e:Blackjack.py
 
-def create_deck():
+ def create_deck():
     suits = ['spades', 'hearts', 'diamonds', 'clubs']
     ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace']
     deck = [(rank, suit) for rank in ranks for suit in suits]
     random.shuffle(deck)
     return deck
 
-def calculate_hand_value(hand):
+ def calculate_hand_value(hand):
     value = 0
     num_aces = 0
     for rank, suit in hand:
@@ -27,16 +35,16 @@ def calculate_hand_value(hand):
         num_aces -= 1
     return value
 
-def is_blackjack(hand):
+ def is_blackjack(hand):
     return calculate_hand_value(hand) == 21
 
-def is_bust(hand):
+ def is_bust(hand):
     return calculate_hand_value(hand) > 21
 
-def deal_card(deck):
+ def deal_card(deck):
     return deck.pop()
 
-class BlackjackGame:
+ class BlackjackGame:
     def __init__(self, root):
         self.root = root
         self.root.title("Blackjack")
@@ -243,6 +251,7 @@ class BlackjackGame:
         messagebox.showinfo("Round Over", result)
         self.start_new_game()
 
+<<<<<<<< HEAD:blackjack7.py
     def play_win_sound(self):
         pygame.mixer.music.load("sounds/win.mp3")
         pygame.mixer.music.play()
@@ -252,6 +261,9 @@ class BlackjackGame:
         pygame.mixer.music.play(-1)  # Loop the music indefinitely
 
 if __name__ == "__main__":
+========
+ if __name__ == "__main__":
+>>>>>>>> fe8760b3c723072b061b0eb69bebc4212e9f3f4e:Blackjack.py
     root = tk.Tk()
     game = BlackjackGame(root)
     root.mainloop()
