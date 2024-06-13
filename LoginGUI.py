@@ -21,7 +21,7 @@ def Login_GUI():
     Users = ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="Name")
     Age = ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="Age")
     Knowledge = ctk.CTkEntry(root, width=197, height=30, font=("Arial", 18), placeholder_text="English knowledge lvl")
-
+        
     def submit_action():
         usrname = Users.get()
         usrage = Age.get()
@@ -31,10 +31,10 @@ def Login_GUI():
         print(usrname)
         print(usrage)
         print(knlvl)
-
+        
         # Collecting user information from the person class
         s.collect_user_info(usrname, usrage, knlvl)
-        root.quit()
+        root.destroy()
 
     Login_Button = ctk.CTkButton(root, width=197, height=50, text="Submit", font=('Arial', 18), command=submit_action)
 
@@ -49,4 +49,3 @@ def Login_GUI():
 
     root.mainloop()
 
-Login_GUI()
