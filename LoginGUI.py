@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 import Save as s
 
+
 def Login_GUI():
     # Opens the window and forces it to stay out of Fullscreen
     root = ctk.CTk()

@@ -8,7 +8,8 @@ import tkinter as tk
 import subprocess
 import json
 from colorama import Fore, Style
-from LoginGUI import *
+from LoginGUI import Login_GUI
+
 
 # Set the API key for OpenAI
 apiKey = "sk-proj-qQ6cSEsutdwbexCghHD4T3BlbkFJiHSVH0yHGTKgPVEKuILj"
@@ -33,7 +34,7 @@ def load_last_user_name_from_json(file_path, key):
         raise FileNotFoundError(f'Datei "{file_path}" wurde nicht gefunden.')
     except json.JSONDecodeError:
         raise ValueError(f'Datei "{file_path}" ist keine gültige JSON-Datei.')
-    root.update()
+ 
 # Benutzername aus JSON laden
 json_file_path = 'user_data.json'
 key = 'name'
@@ -174,7 +175,7 @@ def speak_command():
 def generate_random_word():
     global current_german_word
     current_german_word = get_random_german_word(current_level)
-    practice_output.insert(tk.END, f"Assistant: Bitte übersetzen Sie '{current_german_word}' ins Englische.\n")
+    practice_output.insert(tk.END, f"Dr. Robotnik: Bitte übersetzen Sie '{current_german_word}' ins Englische.\n")
     root.update_idletasks()
     speak(f"Bitte übersetzen Sie '{current_german_word}' ")
  
@@ -193,7 +194,7 @@ def exit():
  
 def onChoice(choice):
     if choice == "practice":
-        practice_output.place(x=250, y=188)
+        practice_output.pack(padx=140, pady=37)
         new_practice()
     else:
         practice_output.pack_forget()
@@ -259,7 +260,8 @@ output.tag_config("user", foreground="blue")
 output.tag_config("assistant", foreground="green")
 output.place(x=250, y=188)
  
-practice_output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white", text_color="lime", font=("Helvetica", 20))
+practice_output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white",bg_color="White", text_color="lime", font=("Helvetica", 20))
+
 
 combovalues = ["chat", "practice"]
  
