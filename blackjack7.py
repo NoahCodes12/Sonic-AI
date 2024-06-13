@@ -3,6 +3,7 @@ from tkinter import messagebox
 import random
 from PIL import Image, ImageTk
 import pygame
+import os
  
 def create_deck():
     suits = ['spades', 'hearts', 'diamonds', 'clubs']
@@ -56,6 +57,10 @@ class BlackjackGame:
  
         self.play_background_music()  # Play background music
  
+        self.silent_mode = False  # Flag to control sound after hitting stand
+        self.music_playing = True  # Flag to control background music
+        self.sound_enabled = True  # Flag to control hand value sound
+ 
     def load_card_images(self):
         card_images = {}
         for suit in ['spades', 'hearts', 'diamonds', 'clubs']:
@@ -94,6 +99,12 @@ class BlackjackGame:
  
         self.reset_button = tk.Button(top_frame, text="Reset", command=self.reset_game, **button_style)
         self.reset_button.pack(side=tk.RIGHT, padx=10)
+ 
+        self.toggle_music_button = tk.Button(top_frame, text="Toggle Music", command=self.toggle_music, **button_style)
+        self.toggle_music_button.pack(side=tk.RIGHT, padx=10)
+ 
+        self.toggle_sound_button = tk.Button(top_frame, text="Toggle Sound", command=self.toggle_sound, **button_style)
+        self.toggle_sound_button.pack(side=tk.RIGHT, padx=10)
  
         bet_frame = tk.Frame(self.root, bg="green")
         bet_frame.pack(pady=10)
@@ -137,15 +148,15 @@ class BlackjackGame:
         self.deck = create_deck()
         self.player_hand = []
         self.dealer_hand = []
-    
+ 
         self.hit_button.config(state=tk.DISABLED)
         self.stand_button.config(state=tk.DISABLED)
         self.deal_button.config(state=tk.NORMAL)
  
         self.clear_hand_labels()
-
-        pygame.mixer.music.load("sounds/music.mp3")
-        pygame.mixer.music.play(-1)
+ 
+        self.silent_mode = False  # Reset silent mode at the start of a new game
+ 
     def clear_hand_labels(self):
         for widget in self.player_cards_frame.winfo_children():
             widget.destroy()
@@ -167,16 +178,21 @@ class BlackjackGame:
         self.hit_button.config(state=tk.NORMAL)
         self.stand_button.config(state=tk.NORMAL)
  
-        self.deal_card_animation('player', 2, self.player_hand)
+        self.deal_card_animation('player', 2, self.player_hand, final=True)
         self.deal_card_animation('dealer', 2, self.dealer_hand, initial=True)
  
-    def deal_card_animation(self, player, num_cards, hand, initial=False):
+    def deal_card_animation(self, player, num_cards, hand, initial=False, final=False):
         if num_cards == 0:
             self.update_hand_labels(initial)
-            if player == 'player' and is_blackjack(self.player_hand):
-                self.player_balance += int(self.bet * 1.5)
-                self.play_win_sound()
-                self.end_round("Player has blackjack! Player wins!")
+            if player == 'player' and final:
+                player_value = calculate_hand_value(self.player_hand)
+                if is_blackjack(self.player_hand):
+                    self.player_balance += int(self.bet * 1.5)
+                    if self.sound_enabled:
+                        self.play_hand_value_sound('blackjack')
+                    self.end_round("Player has blackjack! Player wins!")
+                elif self.sound_enabled:
+                    self.play_hand_value_sound(player_value)
             return
  
         if player == 'player':
@@ -186,16 +202,20 @@ class BlackjackGame:
             hand.append(deal_card(self.deck))
             self.update_hand_labels(initial)
  
-        self.root.after(500, self.deal_card_animation, player, num_cards - 1, hand, initial)
+        self.root.after(500, self.deal_card_animation, player, num_cards - 1, hand, initial, final)
  
     def hit(self):
         self.player_hand.append(deal_card(self.deck))
         self.update_hand_labels()
         if is_bust(self.player_hand):
             self.player_balance -= self.bet
+            if self.sound_enabled:
+                self.play_hand_value_sound('bust')
             self.end_round("Player busts! Dealer wins.")
  
     def stand(self):
+        self.silent_mode = True  # Enable silent mode when player hits stand
+ 
         while calculate_hand_value(self.dealer_hand) < 17:
             self.dealer_hand.append(deal_card(self.deck))
         self.update_hand_labels()
@@ -215,6 +235,8 @@ class BlackjackGame:
             self.end_round("Player wins!")
         elif player_value < dealer_value:
             self.player_balance -= self.bet
+            if self.sound_enabled:
+                self.play_hand_value_sound('bust')
             self.end_round("Dealer wins!")
         else:
             self.end_round("It's a tie!")
@@ -233,8 +255,12 @@ class BlackjackGame:
                 card_label = tk.Label(self.dealer_cards_frame, image=self.card_images[card], bg="green")
             card_label.pack(side=tk.LEFT, padx=5)
  
-        self.player_label.config(text=f"Player's Hand: (Value: {calculate_hand_value(self.player_hand)})")
-        self.dealer_label.config(text=f"Dealer's Hand: (Value: {calculate_hand_value(self.dealer_hand) if not initial else '??'})")
+        player_value = calculate_hand_value(self.player_hand)
+        dealer_value = calculate_hand_value(self.dealer_hand) if not initial else '??'
+        self.player_label.config(text=f"Player's Hand: (Value: {player_value})")
+        self.dealer_label.config(text=f"Dealer's Hand: (Value: {dealer_value})")
+ 
+        
  
     def end_round(self, result):
         self.hit_button.config(state=tk.DISABLED)
@@ -245,15 +271,34 @@ class BlackjackGame:
         messagebox.showinfo("Round Over", result)
         self.start_new_game()
  
+    def play_hand_value_sound(self, value):
+        if value == 'blackjack' or value == 'bust':
+            sound_file = f"sounds/hand_value_{value}.mp3"
+        else:
+            sound_file = f"sounds/hand_value_{value}.mp3" if value <= 21 else "sounds/hand_value_bust.mp3"
+        if os.path.exists(sound_file):
+            sound = pygame.mixer.Sound(sound_file)
+            sound.play()
+ 
     def play_win_sound(self):
-        pygame.mixer.music.load("sounds/win.mp3")
-        pygame.mixer.music.play()
-        
-
+        win_sound = pygame.mixer.Sound("sounds/win.mp3")
+        win_sound.play()
+ 
     def play_background_music(self):
         pygame.mixer.music.load("sounds/music.mp3")
         pygame.mixer.music.play(-1)  # Loop the music indefinitely
  
+    def toggle_music(self):
+        if self.music_playing:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
+        self.music_playing = not self.music_playing
+ 
+    def toggle_sound(self):
+        self.sound_enabled = not self.sound_enabled4
+        state = "enabled" if self.sound_enabled else "disabled"
+        messagebox.showinfo("Sound Toggle", f"Hand value sound is now {state}.")
 if __name__ == "__main__":
     root = tk.Tk()
     game = BlackjackGame(root)

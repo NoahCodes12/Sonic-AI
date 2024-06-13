@@ -8,16 +8,47 @@ import tkinter as tk
 import subprocess
 import json
 from colorama import Fore, Style
-from LoginGUI import Login_GUI
- 
+from LoginGUI import *
+
 # Set the API key for OpenAI
-apiKey = "sk-proj-5jLZmHTAYBQMRuFZdkxwT3BlbkFJsMmRcfD4tCgsqweWzcbI"
+apiKey = "sk-proj-qQ6cSEsutdwbexCghHD4T3BlbkFJiHSVH0yHGTKgPVEKuILj"
 Client = OpenAI(api_key=apiKey)
+
+
+
+# JSON-Datei laden und den letzten Eintrag verwenden
+def load_last_user_name_from_json(file_path, key):
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+            if isinstance(data, list) and len(data) > 0:
+                last_entry = data[-1]
+                if key in last_entry:
+                    return last_entry[key]
+                else:
+                    raise KeyError(f'Schlüssel "{key}" wurde im letzten Eintrag nicht gefunden.')
+            else:
+                raise ValueError('Die JSON-Daten sind keine Liste oder die Liste ist leer.')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'Datei "{file_path}" wurde nicht gefunden.')
+    except json.JSONDecodeError:
+        raise ValueError(f'Datei "{file_path}" ist keine gültige JSON-Datei.')
+    root.update()
+# Benutzername aus JSON laden
+json_file_path = 'user_data.json'
+key = 'name'
+ 
+try:
+    USER_NAME = load_last_user_name_from_json(json_file_path, key)
+except (FileNotFoundError, KeyError, ValueError) as e:
+    USER_NAME = str(e)
+    
+
+
 
 
 # Global variables
 current_german_word = None
-USER_NAME = "user"
 USER_INPUT = []
 current_level = "A1"  # Default level
  
@@ -40,7 +71,7 @@ def UserInput():
         # append user data to USER_INPUT
         USER_INPUT.append(scheme)
     response = chat_with_gpt(UserGet)
-    output.insert(tk.END, "Assistant: " + response + "\n\n", "assistant" )
+    output.insert(tk.END, "Dr. Robotnik: " + response + "\n\n", "assistant" )
     print(f"{Style.BRIGHT}{Fore.CYAN}Assistant input retrieved: {Style.NORMAL}{Fore.BLACK}{response}")
  
  
@@ -230,7 +261,6 @@ output.place(x=250, y=188)
  
 practice_output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white", text_color="lime", font=("Helvetica", 20))
 
- 
 combovalues = ["chat", "practice"]
  
 combobox = ctk.CTkComboBox(root, values=combovalues, command=onChoice, width=150, height=50)

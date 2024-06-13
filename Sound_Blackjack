@@ -1,0 +1,23 @@
+from gtts import gTTS
+import time
+ 
+# Define possible blackjack hand values
+hand_values = list(range(4, 22)) + ['blackjack', 'bust']
+
+# Create MP3 files for each hand value
+for value in hand_values:
+    #text = f"The hand value is {value}."
+    if value == 'blackjack':
+        text = "Blackjack!"
+    elif value == 'bust':
+        text = "Bust!"
+ 
+    # Convert text to speech
+    tts = gTTS(text=text, lang='en')
+ 
+    # Save as mp3
+    mp3_filename = f"sounds/hand_value_{value}.mp3"
+    
+    tts.save(mp3_filename)
+ 
+print("MP3 files generated for all hand values.")
