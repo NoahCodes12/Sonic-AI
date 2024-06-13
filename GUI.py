@@ -34,13 +34,13 @@ def UserInput():
         # scheme to set the example
         scheme = f"{key}: {value}"
         # actual insertions
-        output.insert(tk.END, scheme + "\n")
+        output.insert(tk.END, scheme + "\n", "user")
         # clearing the textbox
         textbox.delete("1.0", tk.END)
         # append user data to USER_INPUT
         USER_INPUT.append(scheme)
     response = chat_with_gpt(UserGet)
-    output.insert(tk.END, "Assistant: " + response + "\n")
+    output.insert(tk.END, "Assistant: " + response + "\n\n", "assistant" )
     print(f"{Style.BRIGHT}{Fore.CYAN}Assistant input retrieved: {Style.NORMAL}{Fore.BLACK}{response}")
  
  
@@ -151,6 +151,7 @@ def new_chat():
     output.delete("1.0", ctk.END)
     practice_output.delete("1.0", ctk.END)
     root.update_idletasks()
+    chat_with_gpt()
  
 def new_practice():
     practice_output.delete("1.0", ctk.END)
@@ -166,8 +167,8 @@ def onChoice(choice):
     else:
         practice_output.pack_forget()
 
-def Vokabel():
-    subprocess.run(["python","Vokabel.py"])
+# def Vokabel():
+#      subprocess.run(["python","Vokabel.py"])
  
  # function to launch blackjack
 def launch_Blackjack():
@@ -183,6 +184,8 @@ def set_sprachniveau(level):
     current_level = levels.get(level, "A1")
     print(f"Sprachniveau gesetzt auf: {current_level}")
  
+
+
 
  
 # Initialize window
@@ -221,6 +224,8 @@ Login_button = ctk.CTkButton(root, text="Login", font=("Arial", 30), width=150, 
 Login_button.place(x=1350, y=40)
  
 output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white", text_color="lime", font=("Helvetica", 20))
+output.tag_config("user", foreground="blue")
+output.tag_config("assistant", foreground="green")
 output.place(x=250, y=188)
  
 practice_output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white", text_color="lime", font=("Helvetica", 20))
@@ -231,7 +236,7 @@ combovalues = ["chat", "practice"]
 combobox = ctk.CTkComboBox(root, values=combovalues, command=onChoice, width=150, height=50)
 combobox.place(x=20, y=188)
  
-new_word_button = ctk.CTkButton(root, text="New Word", font=("Arial", 30), width=145, height=50, command=generate_random_word)
+new_word_button = ctk.CTkButton(root, text="New Word", font=("Arial", 30), width=150, height=50, command=generate_random_word)
 new_word_button.place(x=20, y=450)
 
 # Additional Buttons
