@@ -16,11 +16,14 @@ def save_to_json(new_data, filename="user_data.json"):
             print(f"File {filename} does not exist")
             existing_data = []
 
-        # Update the existing data with new data
+        # Update the existing data with new data if it doesn't already exist
         updated_data = existing_data.copy()
         for user in new_data:
-            if user not in existing_data:
+            # Check if the user already exists in the existing data
+            if not any(existing_user['name'] == user['name'] for existing_user in existing_data):
                 updated_data.append(user)
+            else:
+                print(f"{Fore.RED}User {user['name']} already exists. Skipping save.{Style.RESET_ALL}")
 
         # Write the updated data back to the file
         with open(filename, "w") as file:
@@ -40,3 +43,8 @@ def collect_user_info(name, age, lvl):
         "English Knowledge Level": lvl
     }
     save_to_json([user])
+
+# Example usage
+collect_user_info("John Doe", 30, "Intermediate")
+collect_user_info("Jane Smith", 25, "Advanced")
+collect_user_info("John Doe", 30, "Intermediate")  # This should not be saved again
