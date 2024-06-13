@@ -43,8 +43,3 @@ def collect_user_info(name, age, lvl):
         "English Knowledge Level": lvl
     }
     save_to_json([user])
-
-# Example usage
-collect_user_info("John Doe", 30, "Intermediate")
-collect_user_info("Jane Smith", 25, "Advanced")
-collect_user_info("John Doe", 30, "Intermediate")  # This should not be saved again
