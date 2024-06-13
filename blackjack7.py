@@ -67,7 +67,7 @@ class BlackjackGame:
  
     def create_widgets(self):
         # Load and set the background image
-        self.bg_image = Image.open('cards/bg2.jpg')
+        self.bg_image = Image.open('cards/b5.jpg')
         self.bg_image = self.bg_image.resize((1920, 1080), Image.LANCZOS)
         self.bg_photo = ImageTk.PhotoImage(self.bg_image)
  
@@ -257,5 +257,6 @@ class BlackjackGame:
 if __name__ == "__main__":
     root = tk.Tk()
     game = BlackjackGame(root)
+    root.iconbitmap('Bild.ico')
     root.mainloop()
  
