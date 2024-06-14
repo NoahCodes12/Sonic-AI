@@ -12,7 +12,7 @@ from LoginGUI import Login_GUI
 
 
 # Set the API key for OpenAI
-apiKey = "sk-proj-qQ6cSEsutdwbexCghHD4T3BlbkFJiHSVH0yHGTKgPVEKuILj"
+apiKey = "sk-proj-gqTSALSOM8gLbLxeZPCsT3BlbkFJCdCkLGw7TXP6OMEhDhyI"
 Client = OpenAI(api_key=apiKey)
 
 
@@ -83,26 +83,27 @@ def Log():
 def listen_and_recognize():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        practice_output.insert(tk.END, "Bitte sprechen Sie das deutsche Wort...\n")
+        practice_output.insert(tk.END, "Bitte sprechen Sie das deutsche Wort...\n", "assistent")
         root.update_idletasks()
         print(f"Bitte sprechen Sie das deutsche Wort...")
         audio_data = recognizer.listen(source)
-        practice_output.insert(tk.END, "Erkennung läuft...\n")
+        practice_output.insert(tk.END, "Erkennung läuft...\n", "assistent")
         root.update()
         print("Erkennung läuft...")
+        root.update()
         try:
             text = recognizer.recognize_google(audio_data, language='de-DE')
-            practice_output.insert(tk.END, f"Erkanntes Wort: {text}\n")
+            practice_output.insert(tk.END, f"Erkanntes Wort: {text}\n", "user")
             print(f"Erkanntes Wort: {text}")
             return text
         except sr.UnknownValueError:
             error_message = "Die Spracherkennung konnte das Audio nicht verstehen"
-            practice_output.insert(tk.END, error_message + "\n")
+            practice_output.insert(tk.END, error_message + "\n\n", "assistent")
             print(error_message)
             return None
         except sr.RequestError as e:
             error_message = f"Fehler bei der Anforderung der Ergebnisse; {e}"
-            practice_output.insert(tk.END, error_message + "\n")
+            practice_output.insert(tk.END, error_message + "\n", "assistent")
             print(error_message)
             return None
  
@@ -157,18 +158,24 @@ def ask_to_advance_level(current_level):
                 speak("Ungültige Antwort. Bitte sagen Sie 'ja' oder 'nein'.")
     return False, current_level
  
+
+
+
+    
+
+
+ 
 def speak_command():
     user_translation = listen_and_recognize()
     if user_translation:
-        practice_output.insert(tk.END, f"User: {user_translation}\n")
+        practice_output.insert (tk.END, f"{USER_NAME}: {user_translation}\n", "user")
         response = check_translation(current_german_word, user_translation)
-        practice_output.insert(tk.END, "Assistant: " + response + "\n")
+        practice_output.insert(tk.END, "Dr. Robotnik: " + response + "\n\n", "assistent")
         if "Yes" in response:
             speak("Richtig!")
         else:
             correct_translation = response.split('correct translation of the German word ')[-1]
             correct_translation = correct_translation.split(' is ')[-1].replace('.', '').strip()
-            practice_output.insert(tk.END, f"Falsch, die richtige Übersetzung ist {correct_translation} \n")
             root.update_idletasks()
             speak(f"Falsch. Die richtige Übersetzung ist {correct_translation}.")
  
@@ -199,8 +206,7 @@ def onChoice(choice):
     else:
         practice_output.pack_forget()
 
-# def Vokabel():
-#      subprocess.run(["python","Vokabel.py"])
+
  
  # function to launch blackjack
 def launch_Blackjack():
@@ -230,8 +236,14 @@ image_speak = ImageTk.PhotoImage(Image.open('iconoir--microphone-solid (1).png')
  
 dark_image = Image.open("sonic-running-run.png")
 bild = ctk.CTkImage(dark_image=dark_image, size=(80, 80))
+
+dark_image = Image.open("Egger1.png")
+bild1 = ctk.CTkImage(dark_image=dark_image, size=(80, 80))
  
 label = ctk.CTkLabel(root, image=bild, text="")
+label.place(x=480, y=30)
+
+label = ctk.CTkLabel(root, image=bild1, text="")
 label.place(x=1000, y=30)
  
 send = ctk.CTkButton(root, width=50, height=50, text="", image=image_send, font=('Arial', 18), command=UserInput)
@@ -260,14 +272,18 @@ output.tag_config("user", foreground="blue")
 output.tag_config("assistant", foreground="green")
 output.place(x=250, y=188)
  
-practice_output = ctk.CTkTextbox(root, width=1010, height=390, fg_color="white",bg_color="White", text_color="lime", font=("Helvetica", 20))
-
+practice_output = ctk.CTkTextbox(root, width=984, height=390, fg_color="white",bg_color="White", text_color="lime", font=("Helvetica", 20))
+practice_output.tag_config("user", foreground="blue")
+practice_output.tag_config("assistant", foreground="green")
 
 combovalues = ["chat", "practice"]
  
 combobox = ctk.CTkComboBox(root, values=combovalues, command=onChoice, width=150, height=50)
 combobox.place(x=20, y=188)
- 
+
+english_knowledge = ctk.CTkComboBox(root, values=["Level 1", "Level 2", "Level 3"], command=set_sprachniveau, width=150, height=50)
+english_knowledge.place(x=20, y=250) 
+
 new_word_button = ctk.CTkButton(root, text="New Word", font=("Arial", 30), width=150, height=50, command=generate_random_word)
 new_word_button.place(x=20, y=450)
 
@@ -275,7 +291,6 @@ new_word_button.place(x=20, y=450)
 blackjack_button = ctk.CTkButton(root, text="Blackjack", width=150, height=50, font=('Arial', 30), command=launch_Blackjack)
 blackjack_button.place(x=20, y=315)
  
-english_knowledge = ctk.CTkComboBox(root, values=["Level 1", "Level 2", "Level 3"], command=set_sprachniveau, width=150, height=50)
-english_knowledge.place(x=20, y=250)
+
  
 root.mainloop()
